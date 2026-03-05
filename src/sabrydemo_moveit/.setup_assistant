@@ -1,0 +1,25 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: sabry
+    relative_path: urdf/sabry.urdf.xacro
+  srdf:
+    relative_path: config/sabry.srdf
+  package_settings:
+    author_name: zaid
+    author_email: z.gaafer45@gmail.com
+    generated_timestamp: 1770924151
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity

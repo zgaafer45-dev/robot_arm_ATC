@@ -1,0 +1,21 @@
+# ROS2 build artifacts
+build/
+install/
+log/
+.colcon/
+
+# VSCode settings
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary / backup files
+*.swp
+*.bak
+*.db

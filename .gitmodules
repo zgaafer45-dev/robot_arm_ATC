@@ -1,0 +1,6 @@
+[submodule "src/uros/micro-ROS-Agent"]
+	path = src/uros/micro-ROS-Agent
+	url = https://github.com/micro-ROS/micro-ROS-Agent.git
+[submodule "src/uros/micro_ros_msgs"]
+	path = src/uros/micro_ros_msgs
+	url = https://github.com/micro-ROS/micro_ros_msgs.git
