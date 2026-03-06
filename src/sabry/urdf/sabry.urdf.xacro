@@ -8,8 +8,8 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="sabry">
 
    <link name="world"/>
-  <!-- <xacro:include filename="$(find sabry)/urdf/tools.xacro"/>
-  <xacro:include filename="$(find sabry)/urdf/tools_station.xacro"/> -->
+  <xacro:include filename="$(find sabry)/urdf/tools.xacro"/>
+  <xacro:include filename="$(find sabry)/urdf/tools_station.xacro"/>
 
   <xacro:arg name="is_ignition" default="false"/>
   <xacro:if value="$(arg is_ignition)">
