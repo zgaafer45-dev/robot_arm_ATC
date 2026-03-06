@@ -17,6 +17,7 @@ import trimesh
 from shape_msgs.msg import Mesh, MeshTriangle
 import os
 from ament_index_python.packages import get_package_share_directory
+from gazebo_msgs.srv import SpawnEntity, DeleteEntity
 
 class ToolChangeManager(Node):
 
@@ -35,11 +36,15 @@ class ToolChangeManager(Node):
         self.move_client = ActionClient(self, MoveGroup, "/move_action")
         self.scene_client = self.create_client(ApplyPlanningScene, "apply_planning_scene")
         self.tool_client = self.create_client(LinearMotor, "tool_changer/set_state")
+        self.spawn_client = self.create_client(SpawnEntity, "/spawn_entity")
+        self.delete_client = self.create_client(DeleteEntity, "/delete_entity")
 
         # Wait for dependencies
         self.move_client.wait_for_server()
         self.scene_client.wait_for_service()
         self.tool_client.wait_for_service()
+        self.spawn_client.wait_for_service()
+        self.delete_client.wait_for_service()
 
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self)
@@ -130,6 +135,88 @@ class ToolChangeManager(Node):
         feedback = ChangeTool.Feedback()
         feedback.current_state = text
         self.goal_handle.publish_feedback(feedback)
+
+    def delete_tool_from_dock(self, tool_name):
+
+        req = DeleteEntity.Request()
+        req.name = tool_name
+
+        future = self.delete_client.call_async(req)
+        future.add_done_callback(
+            lambda f: self.spawn_tool_on_robot(tool_name)
+        )
+    
+    def spawn_tool_on_robot(self, tool_name):
+
+        req = SpawnEntity.Request()
+        req.name = tool_name
+        req.robot_namespace = ""
+
+        pkg_path = get_package_share_directory("sabry")
+        urdf_path = os.path.join(pkg_path, "urdf", "mock_tool.xacro")
+
+        with open(urdf_path, "r") as f:
+            req.xml = f.read()
+
+        req.initial_pose.position.x = 0.0
+        req.initial_pose.position.y = 0.0
+        req.initial_pose.position.z = 0.0
+
+        req.reference_frame = "sabry::tool_mount_link"
+
+        future = self.spawn_client.call_async(req)
+        future.add_done_callback(self.spawn_done_cb)
+
+    def spawn_done_cb(self, future):
+
+        if future.result() is None:
+            self.abort("Failed to spawn tool on robot")
+            return
+
+        self.get_logger().info("Tool spawned on robot")
+
+        # Now update MoveIt
+        self.attach_gripper()
+
+    def delete_attached_tool(self, tool_name):
+
+        req = DeleteEntity.Request()
+        req.name = tool_name
+
+        future = self.delete_client.call_async(req)
+        future.add_done_callback(
+            lambda f: self.spawn_tool_at_dock(tool_name)
+        )
+
+    def spawn_tool_at_dock(self, tool_name):
+
+        req = SpawnEntity.Request()
+        req.name = tool_name
+
+        pkg_path = get_package_share_directory("sabry")
+        urdf_path = os.path.join(pkg_path, "urdf", "mock_tool.xacro")
+
+        with open(urdf_path, "r") as f:
+            req.xml = f.read()
+
+        req.initial_pose.position.x = 0.193
+        req.initial_pose.position.y = -0.287
+        req.initial_pose.position.z = 0.238
+
+        req.reference_frame = "world"
+
+        future = self.spawn_client.call_async(req)
+        future.add_done_callback(self.detach_spawn_done_cb)
+
+    def detach_spawn_done_cb(self, future):
+
+        if future.result() is None:
+            self.abort("Failed to respawn tool at dock")
+            return
+
+        self.get_logger().info("Tool returned to dock")
+
+        self.detach_gripper()
 
     # ==========================================================
     # STATE MACHINE START
@@ -234,7 +321,8 @@ class ToolChangeManager(Node):
 
         if self.state == "UNLOCK":
             self.state = "ATTACH"
-            self.attach_gripper()
+            # self.attach_gripper()
+            self.delete_tool_from_dock("gripper")
 
         elif self.state == "LOCK":
             self.state = "MOVE_LIFT"
@@ -243,7 +331,8 @@ class ToolChangeManager(Node):
 
         elif self.state == "DETACH_UNLOCK":
             self.state = "DETACH_REMOVE"
-            self.detach_gripper()
+            # self.detach_gripper()
+            self.delete_attached_tool("gripper")
 
         elif self.state == "DETACH_LOCK":
             self.state = "DETACH_MOVE_LIFT"
