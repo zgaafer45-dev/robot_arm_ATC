@@ -12,7 +12,7 @@ from geometry_msgs.msg import PoseStamped, Point
 from sabry_hardware.srv import ChangeTool, LinearMotor
 from sabry_hardware.action import ChangeTool
 from tf2_ros import TransformListener, Buffer
-import tf2_geometry_msgs
+# import tf2_geometry_msgs
 import trimesh
 from shape_msgs.msg import Mesh, MeshTriangle
 import os
