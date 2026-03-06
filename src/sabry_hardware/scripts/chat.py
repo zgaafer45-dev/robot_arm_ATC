@@ -19,7 +19,6 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from gazebo_msgs.srv import SpawnEntity, DeleteEntity
 
-# Tool Changing Class
 class ToolChangeManager(Node):
 
     def __init__(self):
