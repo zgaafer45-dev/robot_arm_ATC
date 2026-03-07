@@ -250,7 +250,7 @@ class ToolChangeManager(Node):
 
         self.state = "DETACH_MOVE_APPROACH"
 
-        pose = self.get_transform('world', self.tool_poses['gripper']['mount'])
+        pose = self.get_transform('base_link', self.tool_poses['gripper']['mount'])
         if pose is None:
             self.abort("Dock transform not available")
             return
@@ -303,7 +303,7 @@ class ToolChangeManager(Node):
         elif self.state == "DETACH_MOVE_APPROACH":
             self.state = "DETACH_MOVE_DOCK"
             self.publish_feedback("Undocking tool")
-            pose = self.get_transform('world', self.tool_poses['gripper']['mount'])
+            pose = self.get_transform('base_link', self.tool_poses['gripper']['mount'])
             if pose is None:
                 self.abort("Dock transform not available")
                 return
@@ -351,7 +351,7 @@ class ToolChangeManager(Node):
 
         elif self.state == "DETACH_LOCK":
             self.state = "DETACH_MOVE_LIFT"
-            pose = self.get_transform('world', self.tool_poses['gripper']['mount'])
+            pose = self.get_transform('base_link', self.tool_poses['gripper']['mount'])
             if pose is None:
                 self.abort("Dock transform not available")
                 return
