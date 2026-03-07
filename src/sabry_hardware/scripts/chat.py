@@ -289,7 +289,8 @@ class ToolChangeManager(Node):
             self.state = "MOVE_DOCK"
             # self.send_move(self.get_dock_pose())
             self.publish_feedback("Docking tool")
-            self.send_move(self.get_transform('base_link', self.tool_poses['gripper']['mount']))
+            # self.send_move(self.get_transform('base_link', self.tool_poses['gripper']['mount']))
+            self.send_move(self.offset_pose(self.get_transform('base_link', self.tool_poses['gripper']['mount']), dz=0.02))
 
         elif self.state == "MOVE_DOCK":
             self.publish_feedback("Unlocking tool")
