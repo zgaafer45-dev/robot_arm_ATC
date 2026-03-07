@@ -11,7 +11,7 @@
   <!-- <xacro:include filename="$(find sabry)/urdf/tools.xacro"/>
   <xacro:include filename="$(find sabry)/urdf/tools_station.xacro"/> -->
 
-  <xacro:arg name="is_ignition" default="true"/>
+  <xacro:arg name="is_ignition" default="false"/>
   <xacro:if value="$(arg is_ignition)">
   <xacro:include filename="$(find sabry)/urdf/sabry_gazebo.xacro" />
 
