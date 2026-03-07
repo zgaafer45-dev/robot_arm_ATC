@@ -37,8 +37,8 @@ class ToolChangeManager(Node):
         self.move_client = ActionClient(self, MoveGroup, "/move_action")
         self.scene_client = self.create_client(ApplyPlanningScene, "apply_planning_scene")
         self.tool_client = self.create_client(LinearMotor, "tool_changer/set_state")
-        self.spawn_client = self.create_client(SpawnEntity, "/world/empty/create")
-        self.delete_client = self.create_client(DeleteEntity, "/world/empty/remove")
+        # self.spawn_client = self.create_client(SpawnEntity, "/world/empty/create")
+        # self.delete_client = self.create_client(DeleteEntity, "/world/empty/remove")
 
         # Wait for dependencies
         self.move_client.wait_for_server()
@@ -46,20 +46,20 @@ class ToolChangeManager(Node):
         self.tool_client.wait_for_service()
 
 
-        self.get_logger().info("Waiting for /spawn_entity service...")
+        # self.get_logger().info("Waiting for /spawn_entity service...")
 
-        while not self.spawn_client.wait_for_service(timeout_sec=1.0):
-            self.get_logger().warn("/spawn_entity service not available, waiting...")
+        # while not self.spawn_client.wait_for_service(timeout_sec=1.0):
+        #     self.get_logger().warn("/spawn_entity service not available, waiting...")
 
-        self.get_logger().info("/spawn_entity service is available")
+        # self.get_logger().info("/spawn_entity service is available")
 
 
-        self.get_logger().info("Waiting for delete_entity service...")
+        # self.get_logger().info("Waiting for delete_entity service...")
 
-        while not self.delete_client.wait_for_service(timeout_sec=1.0):
-            self.get_logger().warn("delete_entity not available")
+        # while not self.delete_client.wait_for_service(timeout_sec=1.0):
+        #     self.get_logger().warn("delete_entity not available")
 
-        self.get_logger().info("delete_entity service connected")
+        # self.get_logger().info("delete_entity service connected")
 
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self)
