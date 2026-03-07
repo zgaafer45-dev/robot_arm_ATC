@@ -65,9 +65,9 @@ class ToolChangeManager(Node):
         self.tf_listener = TransformListener(self.tf_buffer, self)
 
         self.tool_poses = {
-            'gripper': {'dock': 'gripper_docking_point', 'mount': 'gripper_mount'},
-            'screwdriver': {'dock': 'screwdriver_docking_point', 'mount': 'screwdriver_mount'},
-            'camera': {'dock': 'camera_docking_point', 'mount': 'camera_mount'}
+            'gripper': {'dock': 'gripper_docking_point', 'mount': 'right_tool'},
+            'screwdriver': {'dock': 'screwdriver_docking_point', 'mount': 'mid_tool'},
+            'camera': {'dock': 'camera_docking_point', 'mount': 'left_tool'}
         }
 
         # State
@@ -377,7 +377,7 @@ class ToolChangeManager(Node):
         # co.primitive_poses.append(self.relative_pose().pose)
 
         pkg_path = get_package_share_directory("sabry")
-        mesh_path = os.path.join(pkg_path, "meshes", "mock_tool.STL")
+        mesh_path = os.path.join(pkg_path, "meshes", "right_tool.STL")
 
         mesh = self.create_mesh(mesh_path)
 
@@ -393,7 +393,8 @@ class ToolChangeManager(Node):
         # aco.object.id = "gripper"
         aco.object = co
         aco.object.operation = CollisionObject.ADD
-        aco.touch_links = ["tool_mount_link","gripper_base","gripper","screwdriver_base"]
+        # aco.touch_links = ["tool_mount_link","gripper_base","gripper","screwdriver_base"]
+        aco.touch_links = ["tool_mount_link","right_tool","mid_tool","left_tool"]
 
         ps.robot_state.attached_collision_objects.append(aco)
 
