@@ -9,7 +9,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
-
+from launch.actions import TimerAction
 
 def generate_launch_description():
     sabry = get_package_share_directory("sabry")
@@ -49,10 +49,7 @@ def generate_launch_description():
     gazebo = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
                     get_package_share_directory("ros_gz_sim"), "launch"), "/gz_sim.launch.py"]),
-                launch_arguments=[
-                    ("gz_args", [" -v 4 -r empty.sdf "]
-                    )
-                ]
+                launch_arguments={"gz_args": "-v 4 -r empty.sdf"}.items()
              )
 
     gz_spawn_entity = Node(
@@ -63,13 +60,36 @@ def generate_launch_description():
                    "-name", "sabry"],
     )
 
+    
+
+# Spawn entity **after 3 seconds** delay to ensure Gazebo is up
+#     gz_spawn_entity = TimerAction(
+#     period=3.0,
+#     actions=[Node(
+#         package="ros_gz_sim",
+#         executable="create",
+#         name='spawn_entity',
+#         output="screen",
+#         arguments=["-topic", "robot_description", "-name", "sabry"],
+#         remappings=[("/world/empty/create", "/spawn_entity")]
+#     )]
+# )
+
     gz_ros2_bridge = Node(
-        package="ros_gz_bridge",
-        executable="parameter_bridge",
-        arguments=[
-            "/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock",
-        ]
-    )
+    package="ros_gz_bridge",
+    executable="parameter_bridge",
+    arguments=[
+        # Clock topic (Gazebo → ROS)
+        "/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock",
+
+        # SpawnEntity service (ROS → Gazebo)
+        "/world/empty/create@ros_gz_interfaces/srv/SpawnEntity@gz.msgs.EntityFactory@gz.msgs.Boolean",
+
+        # DeleteEntity service (ROS → Gazebo)
+        "/world/empty/remove@ros_gz_interfaces/srv/DeleteEntity@gz.msgs.Entity@gz.msgs.Boolean"
+    ],
+    output="screen"
+)
 
     return LaunchDescription([
         model_arg,

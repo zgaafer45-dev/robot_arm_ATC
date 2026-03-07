@@ -17,7 +17,8 @@ import trimesh
 from shape_msgs.msg import Mesh, MeshTriangle
 import os
 from ament_index_python.packages import get_package_share_directory
-from gazebo_msgs.srv import SpawnEntity, DeleteEntity
+# from gazebo_msgs.srv import SpawnEntity, DeleteEntity
+from ros_gz_interfaces.srv import SpawnEntity, DeleteEntity
 
 class ToolChangeManager(Node):
 
@@ -36,15 +37,29 @@ class ToolChangeManager(Node):
         self.move_client = ActionClient(self, MoveGroup, "/move_action")
         self.scene_client = self.create_client(ApplyPlanningScene, "apply_planning_scene")
         self.tool_client = self.create_client(LinearMotor, "tool_changer/set_state")
-        # self.spawn_client = self.create_client(SpawnEntity, "/spawn_entity")
-        # self.delete_client = self.create_client(DeleteEntity, "/delete_entity")
+        self.spawn_client = self.create_client(SpawnEntity, "/world/empty/create")
+        self.delete_client = self.create_client(DeleteEntity, "/world/empty/remove")
 
         # Wait for dependencies
         self.move_client.wait_for_server()
         self.scene_client.wait_for_service()
         self.tool_client.wait_for_service()
-        # self.spawn_client.wait_for_service()
-        # self.delete_client.wait_for_service()
+
+
+        self.get_logger().info("Waiting for /spawn_entity service...")
+
+        while not self.spawn_client.wait_for_service(timeout_sec=1.0):
+            self.get_logger().warn("/spawn_entity service not available, waiting...")
+
+        self.get_logger().info("/spawn_entity service is available")
+
+
+        self.get_logger().info("Waiting for delete_entity service...")
+
+        while not self.delete_client.wait_for_service(timeout_sec=1.0):
+            self.get_logger().warn("delete_entity not available")
+
+        self.get_logger().info("delete_entity service connected")
 
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self)

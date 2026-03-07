@@ -372,4 +372,220 @@
     <origin xyz="0 0 0.03" rpy="0 0 0"/>
   </joint>
 
+  
+  <link
+    name="rack_link">
+    <inertial>
+      <origin
+        xyz="-5.55111512312578E-17 0.0439388527305221 0.127985019011009"
+        rpy="0 0 0" />
+      <mass
+        value="1.33706580320268" />
+      <inertia
+        ixx="0.00512163219002062"
+        ixy="-1.4087478364894E-17"
+        ixz="2.49002952560837E-18"
+        iyy="0.0138619580497255"
+        iyz="-4.97729057709547E-21"
+        izz="0.0105520894438881" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sabry/meshes/rack_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sabry/meshes/rack_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="rack_joint"
+    type="fixed">
+    <origin
+      xyz="0.264777532677285 0.366376453001456 0.00500000000000067"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="rack_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="left_tool">
+    <inertial>
+      <origin
+        xyz="0.221354187381911 0.00207926864732538 0.0110698444264432"
+        rpy="0 0 0" />
+      <mass
+        value="0.193903808634625" />
+      <inertia
+        ixx="9.97420889212665E-05"
+        ixy="-7.41465044595358E-09"
+        ixz="5.36785685854692E-07"
+        iyy="0.000115134581663623"
+        iyz="1.18151802440814E-07"
+        izz="0.000165828828819735" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sabry/meshes/left_tool.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sabry/meshes/left_tool.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_tool_joint"
+    type="fixed">
+    <origin
+      xyz="-0.11 -0.061898865159695 0.243499999999999"
+      rpy="3.14159265358979 0 0" />
+    <parent
+      link="rack_link" />
+    <child
+      link="left_tool" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="mid_tool">
+    <inertial>
+      <origin
+        xyz="0.00135418738191134 0.00207926864732594 0.0110698444264431"
+        rpy="0 0 0" />
+      <mass
+        value="0.193903808634625" />
+      <inertia
+        ixx="9.97420889212666E-05"
+        ixy="-7.41465044597996E-09"
+        ixz="5.3678568585472E-07"
+        iyy="0.000115134581663623"
+        iyz="1.18151802440838E-07"
+        izz="0.000165828828819735" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sabry/meshes/mid_tool.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sabry/meshes/mid_tool.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="mid_tool_joint"
+    type="fixed">
+    <origin
+      xyz="0 -0.0618988651596943 0.243499999999999"
+      rpy="3.14159265358979 0 0" />
+    <parent
+      link="rack_link" />
+    <child
+      link="mid_tool" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="right_tool">
+    <inertial>
+      <origin
+        xyz="-0.218645812618089 0.0020792686473266 0.0110698444264432"
+        rpy="0 0 0" />
+      <mass
+        value="0.193903808634625" />
+      <inertia
+        ixx="9.97420889212666E-05"
+        ixy="-7.41465044598803E-09"
+        ixz="5.36785685854731E-07"
+        iyy="0.000115134581663623"
+        iyz="1.181518024408E-07"
+        izz="0.000165828828819735" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sabry/meshes/right_tool.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sabry/meshes/right_tool.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_tool_joint"
+    type="fixed">
+    <origin
+      xyz="0.11 -0.0618988651596943 0.243499999999999"
+      rpy="3.14159265358979 0 0" />
+    <parent
+      link="rack_link" />
+    <child
+      link="right_tool" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+
+
+
 </robot>
