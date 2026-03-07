@@ -65,9 +65,9 @@ class ToolChangeManager(Node):
         self.tf_listener = TransformListener(self.tf_buffer, self)
 
         self.tool_poses = {
-            'gripper': {'dock': 'gripper_docking_point', 'mount': 'right_tool'},
+            'gripper': {'dock': 'gripper_docking_point', 'mount': 'left_tool'},
             'screwdriver': {'dock': 'screwdriver_docking_point', 'mount': 'mid_tool'},
-            'camera': {'dock': 'camera_docking_point', 'mount': 'left_tool'}
+            'camera': {'dock': 'camera_docking_point', 'mount': 'right_tool'}
         }
 
         # State
