@@ -17,7 +17,7 @@ import trimesh
 from shape_msgs.msg import Mesh, MeshTriangle
 import os
 from ament_index_python.packages import get_package_share_directory
-from gazebo_msgs.srv import SpawnEntity, DeleteEntity
+# from gazebo_msgs.srv import SpawnEntity, DeleteEntity
 
 class ToolChangeManager(Node):
 
@@ -36,15 +36,15 @@ class ToolChangeManager(Node):
         self.move_client = ActionClient(self, MoveGroup, "/move_action")
         self.scene_client = self.create_client(ApplyPlanningScene, "apply_planning_scene")
         self.tool_client = self.create_client(LinearMotor, "tool_changer/set_state")
-        self.spawn_client = self.create_client(SpawnEntity, "/spawn_entity")
-        self.delete_client = self.create_client(DeleteEntity, "/delete_entity")
+        # self.spawn_client = self.create_client(SpawnEntity, "/spawn_entity")
+        # self.delete_client = self.create_client(DeleteEntity, "/delete_entity")
 
         # Wait for dependencies
         self.move_client.wait_for_server()
         self.scene_client.wait_for_service()
         self.tool_client.wait_for_service()
-        self.spawn_client.wait_for_service()
-        self.delete_client.wait_for_service()
+        # self.spawn_client.wait_for_service()
+        # self.delete_client.wait_for_service()
 
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self)
@@ -321,8 +321,8 @@ class ToolChangeManager(Node):
 
         if self.state == "UNLOCK":
             self.state = "ATTACH"
-            # self.attach_gripper()
-            self.delete_tool_from_dock("gripper")
+            self.attach_gripper()
+            # self.delete_tool_from_dock("gripper")
 
         elif self.state == "LOCK":
             self.state = "MOVE_LIFT"
@@ -331,8 +331,8 @@ class ToolChangeManager(Node):
 
         elif self.state == "DETACH_UNLOCK":
             self.state = "DETACH_REMOVE"
-            # self.detach_gripper()
-            self.delete_attached_tool("gripper")
+            self.detach_gripper()
+            # self.delete_attached_tool("gripper")
 
         elif self.state == "DETACH_LOCK":
             self.state = "DETACH_MOVE_LIFT"
