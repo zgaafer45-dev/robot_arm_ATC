@@ -17,7 +17,7 @@ import trimesh
 from shape_msgs.msg import Mesh, MeshTriangle
 import os
 from ament_index_python.packages import get_package_share_directory
-# from gazebo_msgs.srv import SpawnEntity, DeleteEntity
+from gazebo_msgs.srv import SpawnEntity, DeleteEntity
 
 class ToolChangeManager(Node):
 
